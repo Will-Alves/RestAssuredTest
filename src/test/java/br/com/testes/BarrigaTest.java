@@ -31,8 +31,8 @@ public class BarrigaTest extends BaseTest {
     @BeforeAll
     public static void login() {
         Map<String, String> login = new HashMap<>();
-        login.put("email", "willsouza@yahoo.com");
-        login.put("senha", "123456");
+        login.put("email", ConfigLoader.get("barriga.email"));
+        login.put("senha", ConfigLoader.get("barriga.senha"));
 
         TOKEN = given()
                 .body(login)

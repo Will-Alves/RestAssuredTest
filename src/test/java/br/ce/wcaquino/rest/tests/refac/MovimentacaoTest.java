@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import br.ce.wcaquino.rest.utils.DataUtils;
 import br.com.testes.BaseTest;
+import br.com.testes.ConfigLoader;
 import br.com.testes.Movimentacao;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -29,8 +30,8 @@ public class MovimentacaoTest extends BaseTest {
         RestAssured.requestSpecification = null;
 
         Map<String, String> login = new HashMap<>();
-        login.put("email", "willsouza@yahoo.com");
-        login.put("senha", "123456");
+        login.put("email", ConfigLoader.get("barriga.email"));
+        login.put("senha", ConfigLoader.get("barriga.senha"));
 
         TOKEN = given()
                 .baseUri("https://barrigarest.wcaquino.me")
