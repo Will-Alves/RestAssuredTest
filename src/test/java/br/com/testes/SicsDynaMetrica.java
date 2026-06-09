@@ -16,7 +16,7 @@ import java.util.Set;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(ExtentReportExtension.class)
-public class Dynatrace {
+public class SicsDynaMetrica {
 
     private static final String API_URL = ConfigLoader.get("interno.base1") + "/aspect/rest/Servico/Parametros/1";
 

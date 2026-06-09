@@ -218,13 +218,13 @@
   <div class="grid-dots"></div>
   <div class="badge">Documentação Técnica — v1.0</div>
   <h1>Testes Automatizados <span>REST</span><br>Suite Interna</h1>
-  <h2>SCC_Teste &amp; Dynatrace</h2>
+  <h2>SCC_Teste &amp; SicsDynaMetrica</h2>
   <div class="divider"></div>
   <div class="meta">
     <strong>Data:</strong> 09/06/2026 &nbsp;·&nbsp;
     <strong>Tecnologias:</strong> Java 17 · JUnit 5 · REST Assured · ExtentReports<br>
     <strong>Cobertura:</strong> 8 testes automatizados &nbsp;·&nbsp;
-    <strong>Classes:</strong> SCC_Teste, Dynatrace &nbsp;·&nbsp;
+    <strong>Classes:</strong> SCC_Teste, SicsDynaMetrica &nbsp;·&nbsp;
     <strong>Execução:</strong> mvn test → SuiteInterno
   </div>
 </div>
@@ -243,7 +243,7 @@
     <li class="sub"><a href="#scc2">3.2 test_GerarSenha</a><span class="pg">6</span></li>
     <li class="sub"><a href="#scc3">3.3 test_GerarSenhaComPrioridade</a><span class="pg">6</span></li>
     <li class="sub"><a href="#scc4">3.4 test_ChamarProximo</a><span class="pg">7</span></li>
-    <li><a href="#dyna">4. Dynatrace</a><span class="pg">8</span></li>
+    <li><a href="#dyna">4. SicsDynaMetrica</a><span class="pg">8</span></li>
     <li class="sub"><a href="#dyna1">4.1 test_ValidarParametrosServico</a><span class="pg">8</span></li>
     <li class="sub"><a href="#dyna2">4.2 test_ValidarListarTMEDia</a><span class="pg">9</span></li>
     <li class="sub"><a href="#dyna3">4.3 test_ValidarMaiorEspera</a><span class="pg">10</span></li>
@@ -259,16 +259,16 @@
   <h1 class="secao">1. Visão Geral</h1>
 
   <p>Este documento descreve a <strong>Suite Interna</strong> de testes automatizados REST,
-  composta pelas classes <code>SCC_Teste</code> e <code>Dynatrace</code>. Os testes validam
+  composta pelas classes <code>SCC_Teste</code> e <code>SicsDynaMetrica</code>. Os testes validam
   endpoints de um sistema de gerenciamento de filas e atendimento — cobrindo geração de senhas,
   chamada de próximo, consulta de TME (Tempo Médio de Espera), maior espera em fila e
   parâmetros de configuração do serviço.</p>
 
   <table>
     <tr><th colspan="2">Resumo da Suite</th></tr>
-    <tr><td><strong>Total de testes</strong></td><td>8 &nbsp;(4 em SCC_Teste + 4 em Dynatrace)</td></tr>
+    <tr><td><strong>Total de testes</strong></td><td>8 &nbsp;(4 em SCC_Teste + 4 em SicsDynaMetrica)</td></tr>
     <tr><td><strong>Framework</strong></td><td>JUnit 5 (Jupiter) + REST Assured 5.x</td></tr>
-    <tr><td><strong>Relatório</strong></td><td>ExtentReports 5 — <code>target/SCC_Teste.html</code> e <code>target/Dynatrace.html</code></td></tr>
+    <tr><td><strong>Relatório</strong></td><td>ExtentReports 5 — <code>target/SCC_Teste.html</code> e <code>target/SicsDynaMetrica.html</code></td></tr>
     <tr><td><strong>Configuração</strong></td><td><code>src/test/resources/config.properties</code> (gitignore — credenciais e IPs internos)</td></tr>
     <tr><td><strong>Execução via Maven</strong></td><td><code>mvn test</code> — Surefire inclui apenas <code>SuiteInterno.java</code></td></tr>
     <tr><td><strong>Java</strong></td><td>17 (uso de pattern matching <code>instanceof Map&lt;?,?&gt; m</code> e <code>Set.of()</code>)</td></tr>
@@ -283,7 +283,7 @@
   <table>
     <tr><th>Ordem</th><th>Classe</th><th>Qtd. testes</th></tr>
     <tr><td>1</td><td><code>SCC_Teste</code></td><td>4</td></tr>
-    <tr><td>2</td><td><code>Dynatrace</code></td><td>4</td></tr>
+    <tr><td>2</td><td><code>SicsDynaMetrica</code></td><td>4</td></tr>
   </table>
   <p>O Maven Surefire está configurado para incluir somente <code>**/SuiteInterno.java</code>,
   garantindo que nenhuma outra classe de teste seja executada inadvertidamente.</p>
@@ -307,7 +307,7 @@
     <li>Capturar output de cada teste via stream <em>tee</em> (grava no buffer E exibe no terminal simultaneamente)</li>
     <li>Registrar request e response com filtros globais do REST Assured via <code>replaceFiltersWith</code></li>
     <li>Medir tempo de resposta HTTP e duração total do teste</li>
-    <li>Gerar relatório HTML independente por classe (<code>SCC_Teste.html</code>, <code>Dynatrace.html</code>)</li>
+    <li>Gerar relatório HTML independente por classe (<code>SCC_Teste.html</code>, <code>SicsDynaMetrica.html</code>)</li>
     <li>Exibir estatísticas: total de testes, passaram, falharam, total de asserções, duração média</li>
     <li>Abrir o relatório automaticamente no Chrome ao fim de cada classe</li>
   </ul>
@@ -468,11 +468,11 @@
   </div>
 </div>
 
-<!-- ══════════════════════════ SEÇÃO 4 — Dynatrace ══════════════════════════ -->
+<!-- ══════════════════════════ SEÇÃO 4 — SicsDynaMetrica ══════════════════════════ -->
 <div class="pagina" id="dyna">
-  <h1 class="secao">4. Dynatrace</h1>
+  <h1 class="secao">4. SicsDynaMetrica</h1>
 
-  <p>Classe <code>br.com.testes.Dynatrace</code>. Valida endpoints de monitoramento de filas
+  <p>Classe <code>br.com.testes.SicsDynaMetrica</code>. Valida endpoints de monitoramento de filas
   e parâmetros de configuração do serviço. A URL principal é carregada como constante estática
   (<code>API_URL</code>) no carregamento da classe. Cada teste usa
   <code>.log().ifValidationFails()</code> — logs aparecem somente em caso de falha.</p>
@@ -488,7 +488,7 @@
 
       <h3 class="item">Descrição</h3>
       <p>Valida a estrutura completa de parâmetros do serviço: nome, IP e grupos de
-      configuração (endpoint Dynatrace, endpoint SCC, API key).</p>
+      configuração (endpoint SicsDynaMetrica, endpoint SCC, API key).</p>
 
       <h3 class="item">Validações</h3>
       <ul class="validacoes">
@@ -498,9 +498,9 @@
         <li><code>result.configuracoes</code>: lista não vazia</li>
         <li>Cada grupo: campos <code>grupo</code> (String) e <code>parametros</code> (lista não vazia)</li>
         <li>Cada parâmetro: <code>chave</code> e <code>valor</code> presentes e não vazios</li>
-        <li><code>EndPointDynatrace</code>: URL com <code>https://</code></li>
+        <li><code>EndPointSicsDynaMetrica</code>: URL com <code>https://</code></li>
         <li><code>EndPointSccListarUnidade</code>: URL com <code>http://</code></li>
-        <li><code>ApiKeyDynatrace</code>: presente e não vazia (valor não exibido no relatório)</li>
+        <li><code>ApiKeySicsDynaMetrica</code>: presente e não vazia (valor não exibido no relatório)</li>
         <li>Campos novos em <code>result</code>: alerta, não falha</li>
       </ul>
       <div class="info-box" style="margin-top:10px">
@@ -738,8 +738,8 @@
       <td><code>validarConfiguracoes(configs, camposGrupo, camposParam)</code></td>
       <td>
         Itera cada grupo de configuração: valida campos estruturais, itera parâmetros e aplica
-        validações específicas por chave conhecida (<code>EndPointDynatrace</code>,
-        <code>EndPointSccListarUnidade</code>, <code>ApiKeyDynatrace</code>).
+        validações específicas por chave conhecida (<code>EndPointSicsDynaMetrica</code>,
+        <code>EndPointSccListarUnidade</code>, <code>ApiKeySicsDynaMetrica</code>).
       </td>
     </tr>
   </table>

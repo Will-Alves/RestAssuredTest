@@ -17,9 +17,9 @@ Suite de testes automatizados de API REST para validação de contratos, campos,
 ```
 src/test/java/br/com/testes/
 ├── suite/
-│   └── SuiteInterno.java          # Ponto de entrada — agrupa SCC_Teste e Dynatrace
+│   └── SuiteInterno.java          # Ponto de entrada — agrupa SCC_Teste e SicsDynaMetrica
 ├── SCC_Teste.java                 # Testes de geração de senha e TAGs
-├── Dynatrace.java                 # Testes de monitoramento de filas e parâmetros
+├── SicsDynaMetrica.java                 # Testes de monitoramento de filas e parâmetros
 ├── ExtentReportExtension.java     # Extensão JUnit 5 para geração de relatório HTML
 ├── Metodos_Rest.java              # Validações reutilizáveis (campos, tipos, formatos)
 ├── Servico_Parametros.java        # Validador de grupos e parâmetros de serviço
@@ -51,7 +51,7 @@ Rodar uma classe específica:
 
 ```bash
 mvn test -Dtest=SCC_Teste -Dsurefire.failIfNoSpecifiedTests=false
-mvn test -Dtest=Dynatrace  -Dsurefire.failIfNoSpecifiedTests=false
+mvn test -Dtest=SicsDynaMetrica  -Dsurefire.failIfNoSpecifiedTests=false
 ```
 
 ## Testes — SCC_Teste
@@ -63,7 +63,7 @@ mvn test -Dtest=Dynatrace  -Dsurefire.failIfNoSpecifiedTests=false
 | `test_GerarSenhaComPrioridade` | POST | `/senha/gerarsenha` | Geração de senha com prioridade |
 | `test_ChamarProximo` | GET | `/senha/Chamarproximo/{fila}/{unidade}` | Chamada do próximo atendimento |
 
-## Testes — Dynatrace
+## Testes — SicsDynaMetrica
 
 | Teste | Método | Endpoint | O que valida |
 |---|---|---|---|
@@ -78,7 +78,7 @@ Após a execução, os relatórios HTML são gerados em:
 
 ```
 target/SCC_Teste.html
-target/Dynatrace.html
+target/SicsDynaMetrica.html
 ```
 
 O relatório é aberto automaticamente no Chrome ao fim de cada classe.
