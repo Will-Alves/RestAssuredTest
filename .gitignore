@@ -1,4 +1,6 @@
 src/test/resources/config.properties
+src/test/java/br/ce/
+src/test/java/br/com/testes/*.java
 
 target/
 *.class
