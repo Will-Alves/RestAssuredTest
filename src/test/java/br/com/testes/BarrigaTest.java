@@ -213,7 +213,7 @@ public class BarrigaTest extends BaseTest {
         mov.setTipo("REC");
         mov.setData_transacao(DataUtils.getDataDiferencaDias(-1));
         mov.setData_pagamento(DataUtils.getDataDiferencaDias(5));
-        mov.setValor(100f);
+        mov.setValor(new java.math.BigDecimal("100.00"));
         mov.setStatus(true);
         return mov;
     }

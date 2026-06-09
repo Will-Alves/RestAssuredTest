@@ -1,5 +1,7 @@
 package br.com.testes;
 
+import java.math.BigDecimal;
+
 public class Movimentacao {
 
     private Integer id;
@@ -8,7 +10,7 @@ public class Movimentacao {
     private String tipo;
     private String data_transacao;
     private String data_pagamento;
-    private Float valor;
+    private BigDecimal valor;
     private Boolean status;
     private Integer conta_id;
     private Integer usuario_id;
@@ -61,11 +63,11 @@ public class Movimentacao {
         this.data_pagamento = data_pagamento;
     }
 
-    public Float getValor() {
+    public BigDecimal getValor() {
         return valor;
     }
 
-    public void setValor(Float valor) {
+    public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
 
