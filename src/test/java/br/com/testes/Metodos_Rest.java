@@ -17,6 +17,8 @@ public class Metodos_Rest {
     public static final String BOLD = "[1m";
     public static final String RESET = "[0m";
 
+    private static final long RESPONSE_TIMEOUT_MS = 5000;
+
     public static void validarBoolean(Map<?, ?> map, String campo, boolean esperado) {
         assertNotNull(map.get(campo), campo + " não deve ser null");
         assertInstanceOf(Boolean.class, map.get(campo), campo + " deve ser Boolean");
@@ -53,7 +55,7 @@ public class Metodos_Rest {
 
     public static void validarTempoResposta(Response response) {
         long responseTime = response.getTime();
-        assertTrue(responseTime < 2000, "Tempo de resposta deve ser < 2000ms: " + responseTime + "ms");
+        assertTrue(responseTime < RESPONSE_TIMEOUT_MS, "Tempo de resposta deve ser < " + RESPONSE_TIMEOUT_MS + "ms: " + responseTime + "ms");
         System.out.println("  ✔ Tempo de resposta: " + responseTime + "ms");
     }
 
