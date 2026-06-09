@@ -1,6 +1,6 @@
-weather.appid=SEU_APPID_AQUI
-
 barriga.email=SEU_EMAIL_AQUI
 barriga.senha=SUA_SENHA_AQUI
 
-siaf.cpf=SEU_CPF_AQUI
+interno.base1=http://IP_SERVIDOR_PRINCIPAL:PORTA
+interno.base2.pa=http://IP_SERVIDOR_PA:PORTA
+interno.base2.fila=http://IP_SERVIDOR_FILA:PORTA

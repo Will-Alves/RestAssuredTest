@@ -18,7 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith(ExtentReportExtension.class)
 public class Dynatrace {
 
-    private static final String API_URL = "http://192.168.0.196:80/aspect/rest/Servico/Parametros/1";
+    private static final String API_URL = ConfigLoader.get("interno.base1") + "/aspect/rest/Servico/Parametros/1";
 
     @BeforeAll
     public static void warmup() {
@@ -74,7 +74,7 @@ public class Dynatrace {
 
     @Test
     public void test_ValidarListarTMEDia() {
-        String apiUrl = "http://192.168.0.116:26618/aspect/rest/fila/ListarTMEDia/";
+        String apiUrl = ConfigLoader.get("interno.base2.fila") + "/aspect/rest/fila/ListarTMEDia/";
 
         Response response = RestAssured.given()
                 .log().ifValidationFails()
@@ -114,7 +114,7 @@ public class Dynatrace {
 
     @Test
     public void test_ValidarMaiorEspera() {
-        String apiUrl = "http://192.168.0.196:80/aspect/rest/fila/ObterMaiorEspera";
+        String apiUrl = ConfigLoader.get("interno.base1") + "/aspect/rest/fila/ObterMaiorEspera";
 
         Response response = RestAssured.given()
                 .log().ifValidationFails()
@@ -154,7 +154,7 @@ public class Dynatrace {
 
     @Test
     public void test_ValidarObterQtdEsperaV2() {
-        String apiUrl = "http://192.168.0.196:80/aspect/rest/fila/ObterQtdEsperaV2";
+        String apiUrl = ConfigLoader.get("interno.base1") + "/aspect/rest/fila/ObterQtdEsperaV2";
 
         Response response = RestAssured.given()
                 .log().ifValidationFails()

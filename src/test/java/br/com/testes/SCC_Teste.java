@@ -23,7 +23,7 @@ public class SCC_Teste {
     public static void warmup() {
         RestAssured.config = RestAssured.config()
                 .httpClient(HttpClientConfig.httpClientConfig().dontReuseHttpClientInstance());
-        try { RestAssured.given().get("http://192.168.0.196:80/aspect/rest/Servico/Parametros/1").then().extract().response(); } catch (Exception ignored) {}
+        try { RestAssured.given().get(ConfigLoader.get("interno.base1") + "/aspect/rest/Servico/Parametros/1").then().extract().response(); } catch (Exception ignored) {}
     }
 
     @AfterAll
@@ -37,7 +37,7 @@ public class SCC_Teste {
 
     @Test
     public void test_PA_ListarTAGsPossiveis() {
-        String apiUrl = "http://192.168.0.116:26616/aspect/rest/PA/ListarTAGsPossiveis/{param1}/{param2}";
+        String apiUrl = ConfigLoader.get("interno.base2.pa") + "/aspect/rest/PA/ListarTAGsPossiveis/{param1}/{param2}";
 
         Response response = RestAssured.given()
                 .pathParam("param1", 5)
@@ -84,7 +84,7 @@ public class SCC_Teste {
 
     @Test
     public void test_GerarSenha() {
-        String apiUrl = "http://192.168.0.196:80/aspect/rest/senha/gerarsenha";
+        String apiUrl = ConfigLoader.get("interno.base1") + "/aspect/rest/senha/gerarsenha";
 
         String body = "{ \"Fila\": \"5\", \"Totem\": \"0\", \"IdUnidade\": \"2\" }";
 
@@ -114,7 +114,7 @@ public class SCC_Teste {
 
     @Test
     public void test_GerarSenhaComPrioridade() {
-        String apiUrl = "http://192.168.0.196:80/aspect/rest/senha/gerarsenha";
+        String apiUrl = ConfigLoader.get("interno.base1") + "/aspect/rest/senha/gerarsenha";
 
         String body = "{ \"Fila\": 1, \"Totem\": 0, \"IdUnidade\": 2, \"Prioridade\": 1 }";
 
@@ -144,7 +144,7 @@ public class SCC_Teste {
 
     @Test
     public void test_ChamarProximo() {
-        String apiUrl = "http://192.168.0.196:80/aspect/rest/senha/Chamarproximo/{fila}/{unidade}";
+        String apiUrl = ConfigLoader.get("interno.base1") + "/aspect/rest/senha/Chamarproximo/{fila}/{unidade}";
 
         Response response = RestAssured.given()
                 .log().all()
