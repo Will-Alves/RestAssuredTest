@@ -19,7 +19,7 @@ src/test/java/br/com/testes/
 ├── suite/
 │   └── SuiteInterno.java          # Ponto de entrada — agrupa SCC_Teste e SicsDynaMetrica
 ├── SCC_Teste.java                 # Testes de geração de senha e TAGs
-├── SicsDynaMetrica.java                 # Testes de monitoramento de filas e parâmetros
+├── SicsDynaMetrica.java           # Testes de monitoramento de filas e parâmetros
 ├── ExtentReportExtension.java     # Extensão JUnit 5 para geração de relatório HTML
 ├── Metodos_Rest.java              # Validações reutilizáveis (campos, tipos, formatos)
 ├── Servico_Parametros.java        # Validador de grupos e parâmetros de serviço
