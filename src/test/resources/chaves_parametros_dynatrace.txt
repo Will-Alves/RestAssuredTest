@@ -1,0 +1,9 @@
+ApiKeyDynatrace
+AtivarObterMaiorTempoEspera
+EndPointDynatrace
+EndPointSccListarUnidade
+Intervalo
+JsonFilas
+Unidade.Listar
+Unidades
+fila.ObterMaiorEspera

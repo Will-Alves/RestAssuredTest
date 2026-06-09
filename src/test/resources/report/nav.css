@@ -1,0 +1,129 @@
+/* ── Branding ── */
+.logo {
+  background-image: none !important;
+  width: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.nav-logo a {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 60px;
+}
+
+/* ── Tipografia ── */
+body.spa-report.dark {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif !important;
+}
+
+/* ── Fundo ── */
+body.dark,
+.dark .header,
+.main-content,
+.vcontainer,
+.test-wrapper,
+.test-content,
+.test-content-inner,
+.detail-view,
+.layout,
+.dark .main-content,
+.dark .vcontainer,
+.dark .test-wrapper,
+.dark .test-content,
+.dark .test-content-inner,
+.dark .detail-view,
+.dark .layout {
+  background-color: #1e1e1e !important;
+}
+
+.test-list,
+.side-nav,
+.dark .test-list,
+.dark .side-nav,
+.nav,
+.dark .nav,
+.sidebar,
+.dark .sidebar,
+#side-menu,
+.dark #side-menu,
+.test-list-item,
+.dark .test-list-item {
+  background-color: #080808 !important;
+  border-right: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+.header.navbar,
+nav.navbar {
+  background-color: #050505 !important;
+  border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+.dark .card,
+.dark .card-body {
+  background-color: #1e1e1e !important;
+  border-color: rgba(255,255,255,0.06) !important;
+}
+
+/* ── Badges de status — Allure style ── */
+.badge.log {
+  font-size: 10px !important;
+  padding: 3px 9px !important;
+  border-radius: 20px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.4px !important;
+  text-transform: uppercase !important;
+  min-width: 52px !important;
+  text-align: center !important;
+  display: inline-block !important;
+}
+
+.pass-bg, .badge.log.pass-bg     { background-color: #3d7a22 !important; color: #d4edcc !important; }
+.fail-bg, .badge.log.fail-bg     { background-color: #8c1f19 !important; color: #fdd9d7 !important; }
+.info-bg, .badge.log.info-bg     { background-color: #1a4e7a !important; color: #cde4f5 !important; }
+.warn-bg, .badge.log.warn-bg,
+.warning-bg                       { background-color: #7a4a08 !important; color: #fde6c0 !important; }
+
+/* ── Ocultar headers da tabela ── */
+table.table-sm thead,
+table.table thead {
+  display: none !important;
+}
+
+/* ── Linhas do log mais leves ── */
+.ivent-row > td {
+  padding: 7px 10px !important;
+  border-top: 1px solid rgba(255,255,255,0.05) !important;
+  border-bottom: none !important;
+  font-size: 12.5px !important;
+  line-height: 1.5 !important;
+}
+
+.ivent-row:hover > td {
+  background-color: rgba(255,255,255,0.03) !important;
+}
+
+/* ── Sidebar ── */
+.text-pass  { color: #6bbf47 !important; }
+.text-fail  { color: #e8463c !important; }
+.text-warn,
+.text-warning { color: #e8a83a !important; }
+
+/* ── Ocultar badges de data/hora do cabeçalho ── */
+span.s,
+span.r {
+  display: none !important;
+}
+
+/* ── Bloco pre (request/response) ── */
+pre {
+  background-color: #141820 !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 4px !important;
+  padding: 8px 10px !important;
+  font-size: 11.5px !important;
+  line-height: 1.6 !important;
+  color: #c5d4e0 !important;
+}
