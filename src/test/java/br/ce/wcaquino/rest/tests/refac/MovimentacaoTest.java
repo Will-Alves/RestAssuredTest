@@ -6,51 +6,21 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import br.ce.wcaquino.rest.utils.DataUtils;
 import br.com.testes.BaseTest;
-import br.com.testes.ConfigLoader;
 import br.com.testes.Movimentacao;
 import io.restassured.RestAssured;
-import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.http.ContentType;
 
 public class MovimentacaoTest extends BaseTest {
 
-    private static String TOKEN;
     private static Integer USUARIO_ID;
 
     @BeforeAll
     public static void login() {
-        RestAssured.requestSpecification = null;
-
-        Map<String, String> login = new HashMap<>();
-        login.put("email", ConfigLoader.get("barriga.email"));
-        login.put("senha", ConfigLoader.get("barriga.senha"));
-
-        TOKEN = given()
-                .baseUri("https://barrigarest.wcaquino.me")
-                .port(443)
-                .contentType(ContentType.JSON)
-                .body(login)
-                .when()
-                .post("/signin")
-                .then()
-                .statusCode(200)
-                .extract().path("token");
-
-        RestAssured.requestSpecification = new RequestSpecBuilder()
-                .setContentType(ContentType.JSON)
-                .addHeader("Authorization", "JWT " + TOKEN)
-                .build();
-
-        RestAssured.get("/reset");
-
+        AuthHelper.doLogin();
         USUARIO_ID = RestAssured.get("/contas").then().extract().path("usuario_id[0]");
     }
 
