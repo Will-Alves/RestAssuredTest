@@ -30,6 +30,7 @@ public class BarrigaTest extends BaseTest {
 
     @BeforeAll
     public static void login() {
+        RestAssured.requestSpecification = null;
         Map<String, String> login = new HashMap<>();
         login.put("email", ConfigLoader.get("barriga.email"));
         login.put("senha", ConfigLoader.get("barriga.senha"));
@@ -86,7 +87,7 @@ public class BarrigaTest extends BaseTest {
     }
 
     @Test
-    @Order(4)
+    @Order(6)
     public void deveInserirMovimentacaoSucesso() {
         Movimentacao mov = getMovimentacaoValida();
 
@@ -101,6 +102,7 @@ public class BarrigaTest extends BaseTest {
     }
 
     @Test
+    @Order(4)
     public void deveValidarCamposObrigatoriosMovimentacao() {
         given()
 
@@ -122,6 +124,7 @@ public class BarrigaTest extends BaseTest {
     }
 
     @Test
+    @Order(5)
     public void naoDeveInserirMovimentacaoComDataFutura() {
         Movimentacao mov = getMovimentacaoValida();
         mov.setData_transacao(DataUtils.getDataDiferencaDias(2));
@@ -138,7 +141,7 @@ public class BarrigaTest extends BaseTest {
     }
 
     @Test
-    @Order(5)
+    @Order(7)
     public void naoDeveRemoverContaComMovimentacao() {
         given()
 
@@ -151,7 +154,7 @@ public class BarrigaTest extends BaseTest {
     }
 
     @Test
-    @Order(6)
+    @Order(8)
     public void deveCalcularSaldoContas() {
         given()
 
@@ -163,7 +166,7 @@ public class BarrigaTest extends BaseTest {
     }
 
     @Test
-    @Order(7)
+    @Order(9)
     public void deveRemoverMovimentacao() {
         given()
 
@@ -186,6 +189,7 @@ public class BarrigaTest extends BaseTest {
     // }
 
     @Test
+    @Order(10)
     public void naoDeveAcessarAPISemToken() {
 
         FilterableRequestSpecification req = (FilterableRequestSpecification) RestAssured.requestSpecification;
