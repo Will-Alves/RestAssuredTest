@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Documentação de Testes Automatizados — Suite Interna</title>
+<style>
+  :root {
+    --bg:       #0d1117;
+    --bg2:      #161b22;
+    --bg3:      #1c2128;
+    --border:   #30363d;
+    --border2:  #21262d;
+    --text:     #c9d1d9;
+    --text2:    #8b949e;
+    --head:     #e6edf3;
+    --cyan:     #39d0c4;
+    --cyan2:    #1ba8a0;
+    --blue:     #58a6ff;
+    --green:    #3fb950;
+    --yellow:   #d29922;
+    --red:      #f85149;
+    --orange:   #e3863d;
+    --purple:   #bc8cff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
+    font-size: 10.5pt;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.65;
+  }
+
+  /* ─── CAPA ─── */
+  .capa {
+    page-break-after: always;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    min-height: 100vh;
+    background: var(--bg);
+    text-align: center; padding: 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .capa::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 20% 30%, rgba(57,208,196,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 80% 70%, rgba(88,166,255,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .capa .badge {
+    border: 1px solid var(--cyan2);
+    color: var(--cyan);
+    border-radius: 20px; padding: 4px 18px; font-size: 8.5pt;
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 36px;
+    background: rgba(57,208,196,0.08);
+  }
+  .capa h1 {
+    font-size: 30pt; font-weight: 700; line-height: 1.15;
+    color: var(--head); margin-bottom: 14px;
+  }
+  .capa h1 span { color: var(--cyan); }
+  .capa h2 { font-size: 13pt; font-weight: 300; color: var(--text2); margin-bottom: 48px; }
+  .capa .divider {
+    width: 80px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    margin: 0 auto 48px;
+  }
+  .capa .meta {
+    font-size: 9.5pt; color: var(--text2); line-height: 2.2;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px 36px;
+  }
+  .capa .meta strong { color: var(--cyan); }
+  .capa .grid-dots {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  /* ─── ÍNDICE ─── */
+  .indice { page-break-after: always; padding: 56px 72px; background: var(--bg); }
+  .indice h2 {
+    font-size: 17pt; color: var(--head);
+    border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 24px;
+  }
+  .indice h2 span { color: var(--cyan); }
+  .indice ol { list-style: none; }
+  .indice ol li {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 0; border-bottom: 1px solid var(--border2); font-size: 10.5pt;
+  }
+  .indice ol li a { color: var(--blue); text-decoration: none; }
+  .indice ol li a:hover { color: var(--cyan); }
+  .indice ol li .pg { color: var(--text2); font-size: 9.5pt; font-variant-numeric: tabular-nums; }
+  .indice .sub { padding-left: 22px; font-size: 10pt; }
+  .indice .sub a { color: var(--text); }
+
+  /* ─── PÁGINAS ─── */
+  .pagina { padding: 48px 68px; background: var(--bg); page-break-before: always; }
+
+  /* Títulos de seção */
+  h1.secao {
+    font-size: 18pt; color: var(--head); margin-bottom: 26px; margin-top: 6px;
+    padding-left: 16px;
+    border-left: 4px solid var(--cyan);
+  }
+  h2.sub {
+    font-size: 12.5pt; color: var(--cyan);
+    margin: 28px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  h3.item { font-size: 10.5pt; color: var(--head); margin: 16px 0 8px; font-weight: 600; }
+
+  p { margin-bottom: 10px; color: var(--text); }
+
+  /* Tabelas */
+  table { width: 100%; border-collapse: collapse; margin: 14px 0 20px; font-size: 10pt; }
+  th {
+    background: var(--bg3); color: var(--cyan);
+    padding: 9px 13px; text-align: left;
+    border-bottom: 2px solid var(--cyan2); font-weight: 600; font-size: 9.5pt;
+    letter-spacing: 0.3px;
+  }
+  td { padding: 8px 13px; border-bottom: 1px solid var(--border2); color: var(--text); vertical-align: top; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* Cards de teste */
+  .teste-card {
+    border: 1px solid var(--border);
+    border-radius: 10px; margin-bottom: 24px;
+    overflow: hidden; background: var(--bg2);
+    page-break-inside: avoid;
+  }
+  .teste-header {
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    padding: 11px 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .teste-header .nome { font-size: 11pt; font-weight: 700; font-family: Consolas, monospace; color: var(--head); }
+  .metodo {
+    border-radius: 4px; padding: 3px 10px;
+    font-size: 8.5pt; font-weight: 700; letter-spacing: 0.8px;
+    font-family: Consolas, monospace;
+  }
+  .metodo.get  { background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid rgba(63,185,80,0.3); }
+  .metodo.post { background: rgba(227,134,61,0.15); color: var(--orange); border: 1px solid rgba(227,134,61,0.3); }
+  .teste-body { padding: 14px 16px; }
+  .teste-body .endpoint {
+    font-family: Consolas, monospace; font-size: 9pt;
+    background: var(--bg); color: var(--blue);
+    padding: 8px 14px; border-radius: 6px; margin-bottom: 14px;
+    border: 1px solid var(--border); word-break: break-all;
+  }
+
+  /* Tags/badges */
+  .tag { display: inline-block; border-radius: 4px; padding: 1px 7px; font-size: 8pt; font-weight: 600; margin: 2px 2px 2px 0; }
+  .tag-verde  { background: rgba(63,185,80,0.12);  color: var(--green);  border: 1px solid rgba(63,185,80,0.25); }
+  .tag-azul   { background: rgba(88,166,255,0.12); color: var(--blue);   border: 1px solid rgba(88,166,255,0.25); }
+  .tag-laranja{ background: rgba(227,134,61,0.12); color: var(--orange); border: 1px solid rgba(227,134,61,0.25); }
+  .tag-roxo   { background: rgba(188,140,255,0.12);color: var(--purple); border: 1px solid rgba(188,140,255,0.25); }
+
+  /* Listas de validação */
+  ul.validacoes { margin: 0; padding-left: 0; list-style: none; }
+  ul.validacoes li {
+    padding: 4px 0 4px 22px; position: relative;
+    font-size: 10pt; color: var(--text); border-bottom: 1px solid var(--border2);
+  }
+  ul.validacoes li:last-child { border-bottom: none; }
+  ul.validacoes li::before { content: "✔"; position: absolute; left: 0; color: var(--green); font-size: 9pt; top: 5px; }
+
+  /* Info box */
+  .info-box {
+    background: rgba(57,208,196,0.06); border: 1px solid rgba(57,208,196,0.2);
+    border-left: 3px solid var(--cyan2);
+    border-radius: 0 6px 6px 0;
+    padding: 11px 14px; margin: 12px 0 6px; font-size: 10pt;
+  }
+  .info-box strong { color: var(--cyan); }
+
+  /* Code inline */
+  code {
+    font-family: Consolas, monospace;
+    background: var(--bg3); color: var(--blue);
+    padding: 1px 5px; border-radius: 3px; font-size: 9pt;
+    border: 1px solid var(--border);
+  }
+
+  /* Erros de português */
+  .erro-card {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--red);
+    background: rgba(248,81,73,0.05);
+    padding: 10px 14px; margin-bottom: 10px; border-radius: 0 6px 6px 0;
+    page-break-inside: avoid;
+  }
+  .erro-arquivo { font-size: 9pt; color: var(--text2); margin-bottom: 5px; font-family: Consolas, monospace; }
+  .erro-atual   { font-family: Consolas, monospace; font-size: 9.5pt; color: var(--red); }
+  .erro-correto { font-family: Consolas, monospace; font-size: 9.5pt; color: var(--green); }
+  .seta { color: var(--text2); margin: 0 8px; font-size: 12pt; }
+  .erro-nota { margin-top: 6px; font-size: 9.5pt; color: var(--text2); font-style: italic; }
+
+  @page { margin: 14mm 14mm 16mm 14mm; }
+  @media print {
+    body { background: var(--bg); }
+    .capa { min-height: 100vh; page-break-after: always; }
+    .pagina { page-break-before: always; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════ CAPA ══════════════════════════ -->
+<div class="capa">
+  <div class="grid-dots"></div>
+  <div class="badge">Documentação Técnica — v1.0</div>
+  <h1>Testes Automatizados <span>REST</span><br>Suite Interna</h1>
+  <h2>SCC_Teste &amp; Dynatrace</h2>
+  <div class="divider"></div>
+  <div class="meta">
+    <strong>Data:</strong> 09/06/2026 &nbsp;·&nbsp;
+    <strong>Tecnologias:</strong> Java 17 · JUnit 5 · REST Assured · ExtentReports<br>
+    <strong>Cobertura:</strong> 8 testes automatizados &nbsp;·&nbsp;
+    <strong>Classes:</strong> SCC_Teste, Dynatrace &nbsp;·&nbsp;
+    <strong>Execução:</strong> mvn test → SuiteInterno
+  </div>
+</div>
+
+<!-- ══════════════════════════ ÍNDICE ══════════════════════════ -->
+<div class="indice">
+  <h2><span>#</span> Sumário</h2>
+  <ol>
+    <li><a href="#visao-geral">1. Visão Geral</a><span class="pg">3</span></li>
+    <li><a href="#arquitetura">2. Arquitetura e Infraestrutura</a><span class="pg">3</span></li>
+    <li class="sub"><a href="#suite">2.1 Suite de Testes (SuiteInterno)</a><span class="pg">4</span></li>
+    <li class="sub"><a href="#config">2.2 Configuração (ConfigLoader)</a><span class="pg">4</span></li>
+    <li class="sub"><a href="#extension">2.3 ExtentReportExtension</a><span class="pg">4</span></li>
+    <li><a href="#scc">3. SCC_Teste</a><span class="pg">5</span></li>
+    <li class="sub"><a href="#scc1">3.1 test_PA_ListarTAGsPossiveis</a><span class="pg">5</span></li>
+    <li class="sub"><a href="#scc2">3.2 test_GerarSenha</a><span class="pg">6</span></li>
+    <li class="sub"><a href="#scc3">3.3 test_GerarSenhaComPrioridade</a><span class="pg">6</span></li>
+    <li class="sub"><a href="#scc4">3.4 test_ChamarProximo</a><span class="pg">7</span></li>
+    <li><a href="#dyna">4. Dynatrace</a><span class="pg">8</span></li>
+    <li class="sub"><a href="#dyna1">4.1 test_ValidarParametrosServico</a><span class="pg">8</span></li>
+    <li class="sub"><a href="#dyna2">4.2 test_ValidarListarTMEDia</a><span class="pg">9</span></li>
+    <li class="sub"><a href="#dyna3">4.3 test_ValidarMaiorEspera</a><span class="pg">10</span></li>
+    <li class="sub"><a href="#dyna4">4.4 test_ValidarObterQtdEsperaV2</a><span class="pg">10</span></li>
+    <li><a href="#utilitarios">5. Classes Utilitárias</a><span class="pg">11</span></li>
+    <li class="sub"><a href="#metodos">5.1 Metodos_Rest</a><span class="pg">11</span></li>
+    <li class="sub"><a href="#servico">5.2 Servico_Parametros</a><span class="pg">13</span></li>
+  </ol>
+</div>
+
+<!-- ══════════════════════════ SEÇÃO 1 ══════════════════════════ -->
+<div class="pagina" id="visao-geral">
+  <h1 class="secao">1. Visão Geral</h1>
+
+  <p>Este documento descreve a <strong>Suite Interna</strong> de testes automatizados REST,
+  composta pelas classes <code>SCC_Teste</code> e <code>Dynatrace</code>. Os testes validam
+  endpoints de um sistema de gerenciamento de filas e atendimento — cobrindo geração de senhas,
+  chamada de próximo, consulta de TME (Tempo Médio de Espera), maior espera em fila e
+  parâmetros de configuração do serviço.</p>
+
+  <table>
+    <tr><th colspan="2">Resumo da Suite</th></tr>
+    <tr><td><strong>Total de testes</strong></td><td>8 &nbsp;(4 em SCC_Teste + 4 em Dynatrace)</td></tr>
+    <tr><td><strong>Framework</strong></td><td>JUnit 5 (Jupiter) + REST Assured 5.x</td></tr>
+    <tr><td><strong>Relatório</strong></td><td>ExtentReports 5 — <code>target/SCC_Teste.html</code> e <code>target/Dynatrace.html</code></td></tr>
+    <tr><td><strong>Configuração</strong></td><td><code>src/test/resources/config.properties</code> (gitignore — credenciais e IPs internos)</td></tr>
+    <tr><td><strong>Execução via Maven</strong></td><td><code>mvn test</code> — Surefire inclui apenas <code>SuiteInterno.java</code></td></tr>
+    <tr><td><strong>Java</strong></td><td>17 (uso de pattern matching <code>instanceof Map&lt;?,?&gt; m</code> e <code>Set.of()</code>)</td></tr>
+  </table>
+
+  <h1 class="secao" id="arquitetura" style="margin-top:34px">2. Arquitetura e Infraestrutura</h1>
+
+  <h2 class="sub" id="suite">2.1 Suite de Testes — SuiteInterno</h2>
+  <p>A classe <code>br.com.testes.suite.SuiteInterno</code> é o ponto de entrada da suite.
+  Usa <code>@Suite</code> e <code>@SelectClasses</code> do JUnit Platform para agrupar as
+  classes na seguinte ordem:</p>
+  <table>
+    <tr><th>Ordem</th><th>Classe</th><th>Qtd. testes</th></tr>
+    <tr><td>1</td><td><code>SCC_Teste</code></td><td>4</td></tr>
+    <tr><td>2</td><td><code>Dynatrace</code></td><td>4</td></tr>
+  </table>
+  <p>O Maven Surefire está configurado para incluir somente <code>**/SuiteInterno.java</code>,
+  garantindo que nenhuma outra classe de teste seja executada inadvertidamente.</p>
+
+  <h2 class="sub" id="config">2.2 Configuração — ConfigLoader</h2>
+  <p>A classe <code>ConfigLoader</code> lê o arquivo <code>config.properties</code> do classpath
+  e expõe o método estático <code>get(String chave)</code>. Se a propriedade não existir ou
+  estiver vazia, uma exceção em tempo de execução é lançada — tornando o erro de configuração explícito.</p>
+
+  <div class="info-box">
+    <strong>Chaves usadas pelos testes:</strong><br>
+    <code>interno.base1</code> — URL base para senhas, filas e parâmetros de serviço<br>
+    <code>interno.base2.pa</code> — URL base para o módulo PA (TAGs possíveis)<br>
+    <code>interno.base2.fila</code> — URL base para o módulo de filas (TME)
+  </div>
+
+  <h2 class="sub" id="extension">2.3 ExtentReportExtension</h2>
+  <p>Extensão JUnit que implementa os callbacks <code>BeforeAll</code>, <code>AfterAll</code>,
+  <code>BeforeEach</code> e <code>AfterEach</code> para:</p>
+  <ul class="validacoes">
+    <li>Capturar output de cada teste via stream <em>tee</em> (grava no buffer E exibe no terminal simultaneamente)</li>
+    <li>Registrar request e response com filtros globais do REST Assured via <code>replaceFiltersWith</code></li>
+    <li>Medir tempo de resposta HTTP e duração total do teste</li>
+    <li>Gerar relatório HTML independente por classe (<code>SCC_Teste.html</code>, <code>Dynatrace.html</code>)</li>
+    <li>Exibir estatísticas: total de testes, passaram, falharam, total de asserções, duração média</li>
+    <li>Abrir o relatório automaticamente no Chrome ao fim de cada classe</li>
+  </ul>
+  <p>Cada classe recebe sua própria instância de <code>ExtentReports</code> via
+  <code>ConcurrentHashMap&lt;String, ClassData&gt;</code>, isolando relatórios por nome simples
+  da classe.</p>
+</div>
+
+<!-- ══════════════════════════ SEÇÃO 3 — SCC_Teste ══════════════════════════ -->
+<div class="pagina" id="scc">
+  <h1 class="secao">3. SCC_Teste</h1>
+
+  <p>Classe <code>br.com.testes.SCC_Teste</code>. Valida os endpoints de senha e TAGs do
+  sistema de atendimento. O <code>@BeforeAll warmup()</code> desabilita reuso de instâncias
+  HTTP e realiza uma requisição de aquecimento para estabilizar a conexão antes dos testes.</p>
+
+  <!-- TESTE 1 -->
+  <div class="teste-card" id="scc1">
+    <div class="teste-header">
+      <span class="metodo get">GET</span>
+      <span class="nome">test_PA_ListarTAGsPossiveis</span>
+    </div>
+    <div class="teste-body">
+      <div class="endpoint">{interno.base2.pa}/aspect/rest/PA/ListarTAGsPossiveis/5/2</div>
+
+      <h3 class="item">Descrição</h3>
+      <p>Valida a listagem de grupos de TAGs e TAGs possíveis para a fila 5 da unidade 2.
+      Verifica integridade referencial: cada TAG deve ter <code>GrupoId</code> apontando para
+      um grupo existente na mesma resposta.</p>
+
+      <h3 class="item">Parâmetros de path</h3>
+      <table>
+        <tr><th>Parâmetro</th><th>Tipo</th><th>Valor</th></tr>
+        <tr><td><code>param1</code></td><td>Integer</td><td>5 (fila)</td></tr>
+        <tr><td><code>param2</code></td><td>Integer</td><td>2 (unidade)</td></tr>
+      </table>
+
+      <h3 class="item">Validações</h3>
+      <ul class="validacoes">
+        <li>Status HTTP <span class="tag tag-verde">200</span></li>
+        <li><code>result.GruposDeTags.Quantidade</code> confere com tamanho de <code>Itens</code></li>
+        <li><code>result.TAGs.Quantidade</code> confere com tamanho de <code>Itens</code></li>
+        <li>Cada grupo: <code>ID</code> (Integer) e <code>Nome</code> (String não vazia)</li>
+        <li>Cada TAG: campos <code>ID</code>, <code>Nome</code>, <code>GrupoId</code>, <code>Cor</code> presentes</li>
+        <li>Cada TAG: <code>Cor</code> em hexadecimal de 6 dígitos (ex: <code>FF5733</code>)</li>
+        <li>Integridade referencial: <code>GrupoId</code> de cada TAG existe na lista de grupos</li>
+        <li>Campos novos na resposta: alerta <code>⚠</code>, não falha o teste</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TESTE 2 -->
+  <div class="teste-card" id="scc2">
+    <div class="teste-header">
+      <span class="metodo post">POST</span>
+      <span class="nome">test_GerarSenha</span>
+    </div>
+    <div class="teste-body">
+      <div class="endpoint">{interno.base1}/aspect/rest/senha/gerarsenha</div>
+
+      <h3 class="item">Descrição</h3>
+      <p>Valida geração de senha <strong>sem prioridade</strong> para a fila 5 da unidade 2.
+      Senhas sem prioridade são compostas exclusivamente por dígitos numéricos.</p>
+
+      <h3 class="item">Body</h3>
+      <table>
+        <tr><th>Campo</th><th>Tipo</th><th>Valor</th></tr>
+        <tr><td><code>Fila</code></td><td>String</td><td>"5"</td></tr>
+        <tr><td><code>Totem</code></td><td>String</td><td>"0"</td></tr>
+        <tr><td><code>IdUnidade</code></td><td>String</td><td>"2"</td></tr>
+      </table>
+
+      <h3 class="item">Validações</h3>
+      <ul class="validacoes">
+        <li>Status HTTP <span class="tag tag-verde">200</span></li>
+        <li>Content-Type contém <code>application/json</code></li>
+        <li>Tempo de resposta &lt; 5.000 ms</li>
+        <li><code>result.sucesso</code> é <code>true</code> (Boolean)</li>
+        <li><code>result.senha</code>: apenas dígitos, valor &gt; 0, entre 1 e 10 caracteres</li>
+        <li><code>result.emissao</code>: formato <code>MM/dd/yyyy HH:mm:ss</code>, data de hoje, recente (últimos 10 min)</li>
+        <li>Campos exatos: <code>sucesso</code>, <code>senha</code>, <code>emissao</code> — sem extras nem faltando</li>
+      </ul>
+      <div class="info-box" style="margin-top:10px">
+        <strong>Atenção:</strong> O campo <code>emissao</code> usa formato americano <code>MM/dd/yyyy</code>
+        (mês/dia/ano), conforme retornado pela API. Comportamento intencional, documentado em <code>validarEmissao()</code>.
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTE 3 -->
+  <div class="teste-card" id="scc3">
+    <div class="teste-header">
+      <span class="metodo post">POST</span>
+      <span class="nome">test_GerarSenhaComPrioridade</span>
+    </div>
+    <div class="teste-body">
+      <div class="endpoint">{interno.base1}/aspect/rest/senha/gerarsenha</div>
+
+      <h3 class="item">Descrição</h3>
+      <p>Valida geração de senha <strong>com prioridade</strong>. O formato é distinto: uma letra
+      seguida de dígitos (ex: <code>T4147</code>).</p>
+
+      <h3 class="item">Body</h3>
+      <table>
+        <tr><th>Campo</th><th>Tipo</th><th>Valor</th></tr>
+        <tr><td><code>Fila</code></td><td>Integer</td><td>1</td></tr>
+        <tr><td><code>Totem</code></td><td>Integer</td><td>0</td></tr>
+        <tr><td><code>IdUnidade</code></td><td>Integer</td><td>2</td></tr>
+        <tr><td><code>Prioridade</code></td><td>Integer</td><td>1</td></tr>
+      </table>
+
+      <h3 class="item">Validações</h3>
+      <ul class="validacoes">
+        <li>Status HTTP <span class="tag tag-verde">200</span></li>
+        <li>Content-Type contém <code>application/json</code></li>
+        <li>Tempo de resposta &lt; 5.000 ms</li>
+        <li><code>result.sucesso</code> é <code>true</code> (Boolean)</li>
+        <li><code>result.senha</code>: regex <code>[A-Za-z]\d+</code>, parte numérica &gt; 0, entre 2 e 10 caracteres</li>
+        <li><code>result.emissao</code>: mesmos critérios de <em>test_GerarSenha</em></li>
+        <li>Campos exatos: <code>sucesso</code>, <code>senha</code>, <code>emissao</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TESTE 4 -->
+  <div class="teste-card" id="scc4">
+    <div class="teste-header">
+      <span class="metodo get">GET</span>
+      <span class="nome">test_ChamarProximo</span>
+    </div>
+    <div class="teste-body">
+      <div class="endpoint">{interno.base1}/aspect/rest/senha/Chamarproximo/1/2</div>
+
+      <h3 class="item">Descrição</h3>
+      <p>Chama o próximo atendimento na fila 1 da unidade 2. Valida todos os campos
+      retornados: senha chamada, data/hora, ID e nome da fila.</p>
+
+      <h3 class="item">Parâmetros de path</h3>
+      <table>
+        <tr><th>Parâmetro</th><th>Tipo</th><th>Valor</th></tr>
+        <tr><td><code>fila</code></td><td>Integer</td><td>1</td></tr>
+        <tr><td><code>unidade</code></td><td>Integer</td><td>2</td></tr>
+      </table>
+
+      <h3 class="item">Validações</h3>
+      <ul class="validacoes">
+        <li>Status HTTP <span class="tag tag-verde">200</span></li>
+        <li>Content-Type contém <code>application/json</code></li>
+        <li>Tempo de resposta &lt; 5.000 ms</li>
+        <li><code>result.Sucesso</code> é <code>true</code> (Boolean)</li>
+        <li><code>result.Senha</code>: apenas dígitos, valor &gt; 0, entre 1 e 10 caracteres</li>
+        <li><code>result.DataHora</code>: formato <code>dd/MM/yyyy HH:mm:ss</code> (formato brasileiro)</li>
+        <li><code>result.IdFila</code>: Integer positivo (&gt; 0)</li>
+        <li><code>result.NomeFila</code>: String não vazia</li>
+        <li>Campos exatos: <code>Sucesso</code>, <code>Senha</code>, <code>DataHora</code>, <code>IdFila</code>, <code>NomeFila</code></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════ SEÇÃO 4 — Dynatrace ══════════════════════════ -->
+<div class="pagina" id="dyna">
+  <h1 class="secao">4. Dynatrace</h1>
+
+  <p>Classe <code>br.com.testes.Dynatrace</code>. Valida endpoints de monitoramento de filas
+  e parâmetros de configuração do serviço. A URL principal é carregada como constante estática
+  (<code>API_URL</code>) no carregamento da classe. Cada teste usa
+  <code>.log().ifValidationFails()</code> — logs aparecem somente em caso de falha.</p>
+
+  <!-- TESTE 1 -->
+  <div class="teste-card" id="dyna1">
+    <div class="teste-header">
+      <span class="metodo get">GET</span>
+      <span class="nome">test_ValidarParametrosServico</span>
+    </div>
+    <div class="teste-body">
+      <div class="endpoint">{interno.base1}/aspect/rest/Servico/Parametros/1</div>
+
+      <h3 class="item">Descrição</h3>
+      <p>Valida a estrutura completa de parâmetros do serviço: nome, IP e grupos de
+      configuração (endpoint Dynatrace, endpoint SCC, API key).</p>
+
+      <h3 class="item">Validações</h3>
+      <ul class="validacoes">
+        <li>Status HTTP <span class="tag tag-verde">200</span></li>
+        <li><code>result.nomeServico</code>: String não vazia</li>
+        <li><code>result.enderecoIP</code>: formato IPv4 válido (<code>\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}</code>)</li>
+        <li><code>result.configuracoes</code>: lista não vazia</li>
+        <li>Cada grupo: campos <code>grupo</code> (String) e <code>parametros</code> (lista não vazia)</li>
+        <li>Cada parâmetro: <code>chave</code> e <code>valor</code> presentes e não vazios</li>
+        <li><code>EndPointDynatrace</code>: URL com <code>https://</code></li>
+        <li><code>EndPointSccListarUnidade</code>: URL com <code>http://</code></li>
+        <li><code>ApiKeyDynatrace</code>: presente e não vazia (valor não exibido no relatório)</li>
+        <li>Campos novos em <code>result</code>: alerta, não falha</li>
+      </ul>
+      <div class="info-box" style="margin-top:10px">
+        <strong>Delegação:</strong> Validação estrutural delegada a
+        <code>Servico_Parametros.validarConfiguracoes()</code>.
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTE 2 -->
+  <div class="teste-card" id="dyna2">
+    <div class="teste-header">
+      <span class="metodo get">GET</span>
+      <span class="nome">test_ValidarListarTMEDia</span>
+    </div>
+    <div class="teste-body">
+      <div class="endpoint">{interno.base2.fila}/aspect/rest/fila/ListarTMEDia/?Unidade=1&amp;Fila=1,2,3,4,5</div>
+
+      <h3 class="item">Descrição</h3>
+      <p>Lista o TME (Tempo Médio de Espera) do dia para as filas 1 a 5 da unidade 1.
+      Retorna ID, nome e TME acumulado do dia por fila.</p>
+
+      <h3 class="item">Parâmetros de query</h3>
+      <table>
+        <tr><th>Parâmetro</th><th>Valor</th></tr>
+        <tr><td><code>Unidade</code></td><td>1</td></tr>
+        <tr><td><code>Fila</code></td><td>"1,2,3,4,5"</td></tr>
+      </table>
+
+      <h3 class="item">Validações</h3>
+      <ul class="validacoes">
+        <li>Status HTTP <span class="tag tag-verde">200</span></li>
+        <li><code>result.Filas</code>: lista não nula</li>
+        <li>Cada fila: campos <code>ID</code>, <code>Nome</code>, <code>TMEDia</code> presentes</li>
+        <li><code>ID</code> e <code>Nome</code>: String não vazia</li>
+        <li><code>TMEDia</code>: formato <code>HH:mm:ss</code> — aceita horas &gt; 23 (TME acumulado)</li>
+        <li>Log individual por fila: ID, Nome e TMEDia no relatório</li>
+        <li>Relatório de campos novos para toda a lista</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TESTE 3 -->
+  <div class="teste-card" id="dyna3">
+    <div class="teste-header">
+      <span class="metodo get">GET</span>
+      <span class="nome">test_ValidarMaiorEspera</span>
+    </div>
+    <div class="teste-body">
+      <div class="endpoint">{interno.base1}/aspect/rest/fila/ObterMaiorEspera?Unidade=1&amp;Fila=1,2,3,4,5</div>
+
+      <h3 class="item">Descrição</h3>
+      <p>Obtém a senha com maior tempo de espera entre as filas 1 a 5 da unidade 1.
+      Retorna número, fila de origem, data de entrada e tempo de espera.</p>
+
+      <h3 class="item">Validações</h3>
+      <ul class="validacoes">
+        <li>Status HTTP <span class="tag tag-verde">200</span></li>
+        <li><code>result.Senha</code>: objeto não nulo</li>
+        <li><code>Senha.Numero</code>: String numérica, valor &gt; 0, entre 1 e 10 caracteres</li>
+        <li><code>Senha.Fila</code>: String não vazia</li>
+        <li><code>Senha.DataEntradaFila</code>: formato <code>dd/MM/yyyy HH:mm:ss</code> (brasileiro)</li>
+        <li><code>Senha.TempoEspera</code>: formato <code>HH:mm:ss</code></li>
+        <li>Campos exatos em <code>result.Senha</code>: <code>Numero</code>, <code>Fila</code>, <code>DataEntradaFila</code>, <code>TempoEspera</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TESTE 4 -->
+  <div class="teste-card" id="dyna4">
+    <div class="teste-header">
+      <span class="metodo get">GET</span>
+      <span class="nome">test_ValidarObterQtdEsperaV2</span>
+    </div>
+    <div class="teste-body">
+      <div class="endpoint">{interno.base1}/aspect/rest/fila/ObterQtdEsperaV2?Unidade=1&amp;Fila=1,2,3,4,5</div>
+
+      <h3 class="item">Descrição</h3>
+      <p>Quantidade de senhas aguardando atendimento em cada fila. Retorna nome da fila e
+      quantidade de espera por fila.</p>
+
+      <h3 class="item">Validações</h3>
+      <ul class="validacoes">
+        <li>Status HTTP <span class="tag tag-verde">200</span></li>
+        <li><code>result.Filas</code>: lista não nula</li>
+        <li>Cada fila: campos <code>NomeFila</code> e <code>QtdeEspera</code> presentes</li>
+        <li><code>NomeFila</code>: String não vazia</li>
+        <li><code>QtdeEspera</code>: String composta apenas por dígitos (numérico retornado como String)</li>
+        <li>Log individual por fila: nome e quantidade no relatório</li>
+        <li>Relatório de campos novos para toda a lista</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════ SEÇÃO 5 — Utilitários ══════════════════════════ -->
+<div class="pagina" id="utilitarios">
+  <h1 class="secao">5. Classes Utilitárias</h1>
+
+  <h2 class="sub" id="metodos">5.1 Metodos_Rest</h2>
+  <p>Centraliza todas as validações reutilizadas pelos testes. Cada método realiza asserções
+  JUnit e imprime o resultado no <code>System.out</code>, que é capturado pela
+  <code>ExtentReportExtension</code> e exibido no relatório HTML.</p>
+
+  <table>
+    <tr>
+      <th style="width:30%">Método</th>
+      <th style="width:14%">Categoria</th>
+      <th>Descrição</th>
+    </tr>
+    <tr>
+      <td><code>validarBoolean(map, campo, esperado)</code></td>
+      <td><span class="tag tag-azul">Campo</span></td>
+      <td>Campo não nulo, tipo Boolean, igual ao valor esperado.</td>
+    </tr>
+    <tr>
+      <td><code>validarString(map, campo)</code></td>
+      <td><span class="tag tag-azul">Campo</span></td>
+      <td>Campo não nulo, tipo String, não vazio.</td>
+    </tr>
+    <tr>
+      <td><code>validarInteiro(map, campo)</code></td>
+      <td><span class="tag tag-azul">Campo</span></td>
+      <td>Campo não nulo e tipo Integer.</td>
+    </tr>
+    <tr>
+      <td><code>validarInteiroPositivo(map, campo)</code></td>
+      <td><span class="tag tag-azul">Campo</span></td>
+      <td>Integer com valor &gt; 0.</td>
+    </tr>
+    <tr>
+      <td><code>validarContentType(response)</code></td>
+      <td><span class="tag tag-verde">HTTP</span></td>
+      <td>Content-Type contém <code>application/json</code>.</td>
+    </tr>
+    <tr>
+      <td><code>validarTempoResposta(response)</code></td>
+      <td><span class="tag tag-verde">HTTP</span></td>
+      <td>Tempo de resposta &lt; 5.000 ms (constante <code>RESPONSE_TIMEOUT_MS</code>).</td>
+    </tr>
+    <tr>
+      <td><code>validarSenhaSemPrioridade(map, campo)</code></td>
+      <td><span class="tag tag-azul">Campo</span></td>
+      <td>String numérica pura: apenas dígitos, valor &gt; 0, tamanho entre 1 e 10.</td>
+    </tr>
+    <tr>
+      <td><code>validarSenhaComPrioridade(map, campo)</code></td>
+      <td><span class="tag tag-azul">Campo</span></td>
+      <td>1 letra + dígitos, parte numérica &gt; 0, tamanho entre 2 e 10.</td>
+    </tr>
+    <tr>
+      <td><code>validarEmissao(map, campo)</code></td>
+      <td><span class="tag tag-azul">Campo</span></td>
+      <td>Data <code>MM/dd/yyyy HH:mm:ss</code> (americano): hoje, não futura, recente (últimos 10 min).</td>
+    </tr>
+    <tr>
+      <td><code>validarQuantidade(lista, qtd, label)</code></td>
+      <td><span class="tag tag-azul">Lista</span></td>
+      <td>Tamanho da lista confere com a quantidade declarada pela API.</td>
+    </tr>
+    <tr>
+      <td><code>validarCamposItem(map, esperados, label)</code></td>
+      <td><span class="tag tag-roxo">Estrutura</span></td>
+      <td>Todos os campos esperados presentes. Extras geram alerta, não falha.</td>
+    </tr>
+    <tr>
+      <td><code>validarCamposExatos(map, esperados)</code></td>
+      <td><span class="tag tag-roxo">Estrutura</span></td>
+      <td>Campos são <em>exatamente</em> os esperados — sem extras nem faltando.</td>
+    </tr>
+    <tr>
+      <td><code>validarCorHex(map, campo)</code></td>
+      <td><span class="tag tag-azul">Campo</span></td>
+      <td>Hexadecimal de 6 dígitos (<code>[0-9A-Fa-f]{6}</code>).</td>
+    </tr>
+    <tr>
+      <td><code>validarReferenciaExiste(lista, chave, valor, label)</code></td>
+      <td><span class="tag tag-roxo">Referência</span></td>
+      <td>Integridade referencial: o valor existe na lista pelo campo chave.</td>
+    </tr>
+    <tr>
+      <td><code>validarStringNumerica(map, campo)</code></td>
+      <td><span class="tag tag-azul">Campo</span></td>
+      <td>String contendo apenas dígitos.</td>
+    </tr>
+    <tr>
+      <td><code>validarHorario(map, campo)</code></td>
+      <td><span class="tag tag-azul">Campo</span></td>
+      <td>Formato <code>HH:mm:ss</code> (aceita horas &gt; 23 para TME acumulado).</td>
+    </tr>
+    <tr>
+      <td><code>validarDataHoraBR(map, campo)</code></td>
+      <td><span class="tag tag-azul">Campo</span></td>
+      <td>Formato <code>dd/MM/yyyy HH:mm:ss</code> (brasileiro).</td>
+    </tr>
+    <tr>
+      <td><code>validarIP(map, campo)</code></td>
+      <td><span class="tag tag-azul">Campo</span></td>
+      <td>Endereço IPv4 no formato <code>n.n.n.n</code>.</td>
+    </tr>
+    <tr>
+      <td><code>validarURL(valor, protocolo)</code></td>
+      <td><span class="tag tag-azul">Campo</span></td>
+      <td>URL não vazia, iniciando com o protocolo informado.</td>
+    </tr>
+    <tr>
+      <td><code>imprimirCabecalho(titulo, apiUrl)</code></td>
+      <td><span class="tag tag-laranja">Relatório</span></td>
+      <td>Imprime cabeçalho de seção: título, URL testada, início das validações.</td>
+    </tr>
+    <tr>
+      <td><code>relatorioCampos(map, esperados)</code></td>
+      <td><span class="tag tag-laranja">Relatório</span></td>
+      <td>Exibe campos novos detectados; não falha.</td>
+    </tr>
+    <tr>
+      <td><code>relatorioCamposLista(lista, esperados, rotulo)</code></td>
+      <td><span class="tag tag-laranja">Relatório</span></td>
+      <td>Itera lista e exibe campos novos por item; não falha.</td>
+    </tr>
+    <tr>
+      <td><code>validarChavesNovas(detectadas, baseline, rotulo)</code></td>
+      <td><span class="tag tag-laranja">Baseline</span></td>
+      <td>Compara chaves com arquivo de baseline; adiciona novas automaticamente ao arquivo.</td>
+    </tr>
+  </table>
+
+  <h2 class="sub" id="servico">5.2 Servico_Parametros</h2>
+  <p>Separa a lógica de validação de configurações do serviço da classe de teste,
+  permitindo reuso em futuros testes que consumam o mesmo endpoint.</p>
+
+  <table>
+    <tr><th>Método</th><th>Descrição</th></tr>
+    <tr>
+      <td><code>validarConfiguracoes(configs, camposGrupo, camposParam)</code></td>
+      <td>
+        Itera cada grupo de configuração: valida campos estruturais, itera parâmetros e aplica
+        validações específicas por chave conhecida (<code>EndPointDynatrace</code>,
+        <code>EndPointSccListarUnidade</code>, <code>ApiKeyDynatrace</code>).
+      </td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>
