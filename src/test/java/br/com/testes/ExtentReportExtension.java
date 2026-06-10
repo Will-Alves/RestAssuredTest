@@ -78,8 +78,8 @@ public class ExtentReportExtension
 
             ExtentSparkReporter spark = new ExtentSparkReporter(tempPath);
             spark.config().setTheme(Theme.DARK);
-            spark.config().setDocumentTitle("Relatório de Testes — " + className);
-            spark.config().setReportName(className + " — Test Report");
+            spark.config().setDocumentTitle("Testes — " + className);
+            spark.config().setReportName("Testes " + className);
             spark.config().setEncoding("UTF-8");
             spark.config().enableOfflineMode(true);
             spark.config().setCss(NAV_CSS);
@@ -104,7 +104,7 @@ public class ExtentReportExtension
             extent.flush();
 
             String finalPath = "target/" + className + ".html";
-            patchHtml(tempPath, finalPath);
+            patchHtml(tempPath, finalPath, className);
 
             if (!linkPrinted) {
                 linkPrinted = true;
@@ -328,12 +328,18 @@ public class ExtentReportExtension
         return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
     }
 
-    private static void patchHtml(String sourcePath, String targetPath) {
+    private static void patchHtml(String sourcePath, String targetPath, String className) {
         try {
             java.nio.file.Path src  = java.nio.file.Paths.get(sourcePath);
             String             html = new String(java.nio.file.Files.readAllBytes(src), StandardCharsets.UTF_8);
             html = html.replaceAll("<link rel=\"apple-touch-icon\"[^>]*>", "");
             html = html.replaceAll("<link rel=\"shortcut icon\"[^>]*>", "");
+            html = html.replace(
+                "<span class=\"font-size-14\">Tests</span>",
+                "<span style=\"font-size:17px!important;font-weight:600\">Testes " + className + "</span>");
+            html = html.replaceAll(
+                "(<span>\\d{2}:\\d{2}:\\d{2}</span> / <span>[^<]+</span>)\\s*(<span class=\"badge (?:pass|fail)-bg log) float-right\">([^<]+)</span>",
+                "$2\">$3</span> $1");
             html = html.replace("</head>",
                 "<link rel=\"icon\" type=\"image/svg+xml\" href=\"" + FAVICON_SVG + "\">\n</head>");
             java.nio.file.Path dest = java.nio.file.Paths.get(targetPath);

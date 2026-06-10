@@ -4,21 +4,23 @@ Use este prompt ao ajustar o visual dos relatórios HTML gerados pelo ExtentRepo
 
 ---
 
-## Paleta de cores (mesma da documentação)
+## Paleta de cores
 
-| Variável       | Hex       | Uso                              |
-|----------------|-----------|----------------------------------|
-| bg principal   | `#0d1117` | fundo da página e content area   |
-| bg sidebar     | `#080d12` | sidebar e navbar superior        |
-| bg card        | `#161b22` | cards de teste                   |
-| borda          | `#30363d` | divisores, bordas                |
-| ciano          | `#39d0c4` | accent — logo, item ativo, `pre` |
-| verde          | `#3fb950` | PASS                             |
-| vermelho       | `#f85149` | FAIL                             |
-| azul           | `#58a6ff` | INFO, links                      |
-| amarelo        | `#d29922` | WARN                             |
-| texto principal| `#e6edf3` | títulos, nomes de teste          |
-| texto secundário| `#8b949e`| timestamps, metadados            |
+| Token          | Hex        | Uso                                |
+|----------------|------------|------------------------------------|
+| bg principal   | `#0d1117`  | fundo da página e content area     |
+| bg sidebar     | `#0b0f16`  | sidebar e navbar superior          |
+| bg card        | `#161b22`  | cards de teste                     |
+| borda          | `#30363d`  | divisores, bordas                  |
+| borda sutil    | `#21262d`  | separadores de linha de log        |
+| ciano          | `#39d0c4`  | accent — logo, item ativo, `pre`   |
+| verde          | `#3fb950`  | PASS                               |
+| vermelho       | `#f85149`  | FAIL                               |
+| azul           | `#58a6ff`  | INFO, links                        |
+| amarelo        | `#d29922`  | WARN                               |
+| texto principal| `#e6edf3`  | títulos, nomes de teste            |
+| texto conteúdo | `#c9d1d9`  | corpo das linhas de log            |
+| texto mudo     | `#6e7681`  | timestamps, metadados              |
 
 ---
 
@@ -27,37 +29,111 @@ Use este prompt ao ajustar o visual dos relatórios HTML gerados pelo ExtentRepo
 - `src/test/resources/report/nav.css` — injetado via `spark.config().setCss(...)`
 - `src/test/resources/report/branding.js` — injetado via `spark.config().setJs(...)`
 
-Carregados em `ExtentReportExtension.java`:
+O CSS e o JS são lidos durante a execução dos testes e injetados **inline** no HTML gerado. O relatório é autocontido — funciona ao abrir direto pelo caminho de arquivo, sem servidor.
+
+---
+
+## Seletores reais do HTML gerado (ExtentReports 5 Spark)
+
+> **Atenção:** o `<body>` tem `class="spa -report dark"` — as classes reais são `spa`, `-report` e `dark`. Usar `body.spa-report` não funciona. Usar `body.dark` ou `.dark` funciona.
+
+> **Estrutura da sidebar (invertida):** `<ul class="test-list-item">` contém `<li class="test-item">`. O atributo `status="pass"` fica no `<li>`, não no `<ul>`. Seletores no `<ul>` não enxergam o `status`.
+
+| Elemento                        | Seletor real                                        |
+|---------------------------------|-----------------------------------------------------|
+| Corpo da página                 | `body.dark`                                         |
+| Content area principal          | `.main-content`                                     |
+| Sidebar                         | `.side-nav`, `.test-list-wrapper`                   |
+| Navbar superior                 | `.header.navbar`                                    |
+| Header da lista (label Testes)  | `.test-list-tools`                                  |
+| Container de itens              | `<ul class="test-list-item">`                       |
+| Item na sidebar                 | `.test-list-item .test-item` (o `<li>`)             |
+| Item ativo                      | `.test-list-item .test-item.active`                 |
+| Item por status                 | `.test-list-item .test-item[status="pass"]`         |
+| Nome do teste na sidebar        | `.test-detail .name`                                |
+| Hora/duração na sidebar         | `.test-detail .text-sm`                             |
+| Badge PASS/FAIL na sidebar      | `.test-detail .text-sm .badge` (inline, antes do timestamp após Java patch) |
+| Cabeçalho do detalhe            | `.detail-head`                                      |
+| Título do teste no detalhe      | `h5.test-status`                                    |
+| Linhas de log                   | `.event-row > td` (não `.ivent-row`)                |
+| Coluna de timestamp             | `.timestamp-col`                                    |
+| Blocos de código                | `pre`                                               |
+
+---
+
+## Pós-processamento Java (patchHtml)
+
+Alguns elementos do Spark não podem ser sobrescritos via CSS por conta de `!important` ou renderização Angular. A classe `ExtentReportExtension.java` processa o HTML gerado com `html.replace()` / `html.replaceAll()` antes de salvar o arquivo final.
+
+Patches ativos:
+- Remove `<link rel="apple-touch-icon">` e `<link rel="shortcut icon">`
+- Substitui `<span class="font-size-14">Tests</span>` → `<span style="font-size:17px!important;font-weight:600">Testes ClassName</span>`
+- Reordena badge + timestamp na sidebar: move o badge (`pass-bg`/`fail-bg`) para ANTES do timestamp, retirando o `float-right`
+
 ```java
-spark.config().setCss(Files.readString(Path.of(cssPath)));
-spark.config().setJs(Files.readString(Path.of(jsPath)));
+// Label "Testes ClassName" na sidebar
+html = html.replace(
+    "<span class=\"font-size-14\">Tests</span>",
+    "<span style=\"font-size:17px!important;font-weight:600\">Testes " + className + "</span>");
+
+// Badge antes do timestamp (sem float)
+html = html.replaceAll(
+    "(<span>\\d{2}:\\d{2}:\\d{2}</span> / <span>[^<]+</span>)\\s*(<span class=\"badge (?:pass|fail)-bg log) float-right\">([^<]+)</span>",
+    "$2\">$3</span> $1");
 ```
 
 ---
 
-## Regras de estilo
+## Padrões de estilo aplicados
 
 ### Tipografia
-- Interface (sidebar, badges, cabeçalhos): `'Segoe UI', -apple-system, sans-serif`
-- Nomes de teste e linhas de log: `Consolas, 'JetBrains Mono', monospace`
-- Blocos `pre`: `Consolas, monospace`, borda esquerda ciano `#39d0c4`
+- Interface geral: `'Segoe UI', -apple-system, sans-serif`
+- Blocos `pre`: `Consolas, 'Courier New', monospace`
 
-### Títulos
-- Título do teste no painel de detalhe: `18px bold #e6edf3`, borda inferior `#30363d`
-- Nome na navbar: `15px bold #39d0c4`
-- Cabeçalho "Tests" da sidebar: uppercase, `#39d0c4`, `1px #30363d` bottom
-
-### Item na sidebar
-- Texto do nome: `#e6edf3` (branco — NÃO verde, mesmo quando PASS)
-- Status via borda esquerda colorida: `3px solid #3fb950` (PASS) ou `#f85149` (FAIL)
-- Fundo sutil: `rgba(63,185,80,0.06)` para PASS
-
-### Badges
+### Textura de fundo
 ```css
-.pass-bg { background: rgba(63,185,80,0.18); color: #3fb950; border: 1px solid rgba(63,185,80,0.35); }
-.fail-bg  { background: rgba(248,81,73,0.18); color: #f85149; border: 1px solid rgba(248,81,73,0.35); }
-.info-bg  { background: rgba(88,166,255,0.18); color: #58a6ff; border: 1px solid rgba(88,166,255,0.35); }
-.warn-bg  { background: rgba(210,153,34,0.18); color: #d29922; border: 1px solid rgba(210,153,34,0.35); }
+.main-content {
+  background-color: #0d1117 !important;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px) !important;
+  background-size: 28px 28px !important;
+}
+```
+
+### Sidebar — itens
+```css
+/* Separator entre itens */
+.test-list-item .test-item {
+  border-bottom: 1px solid #21262d !important;
+}
+/* Item ativo (classe adicionada pelo Angular ao clicar) */
+.test-list-item .test-item.active {
+  background-color: rgba(57,208,196,0.06) !important;
+}
+.test-list-item .test-item:hover {
+  background-color: rgba(255,255,255,0.03) !important;
+}
+/* Sem border-left no item — causa retângulo visual indesejado */
+```
+
+### Título do teste (painel de detalhe)
+```css
+h5.test-status {
+  font-size: 19px !important;
+  font-weight: 600 !important;
+  color: #e6edf3 !important;
+}
+h5.test-status.text-pass,
+h5.test-status.text-fail {
+  color: #e6edf3 !important;
+}
+```
+
+### Badges de status no log
+```css
+.pass-bg { background: rgba(63,185,80,0.15);  color: #3fb950; border: 1px solid rgba(63,185,80,0.3);  }
+.fail-bg  { background: rgba(248,81,73,0.15);  color: #f85149; border: 1px solid rgba(248,81,73,0.3);  }
+.info-bg  { background: rgba(88,166,255,0.15); color: #58a6ff; border: 1px solid rgba(88,166,255,0.3); }
+.warn-bg  { background: rgba(210,153,34,0.15); color: #d29922; border: 1px solid rgba(210,153,34,0.3); }
 ```
 
 ### Ícone (branding.js)
@@ -68,7 +144,13 @@ spark.config().setJs(Files.readString(Path.of(jsPath)));
 
 ## O que NÃO fazer
 
-- Não aplicar monospace em `*` globalmente — deixa a interface com cara de terminal genérico
-- Não usar `color: #3fb950` no nome do teste na sidebar — usa borda esquerda como indicador, texto fica branco
-- Não remover Font Awesome da regra de tipografia — ícones quebram se o `font-family` global for monospace
-- Não alterar o fundo padrão do ExtentReports no Java — fazer tudo via CSS injetado
+- Não usar `body.spa-report.dark` — o body tem `class="spa -report dark"` com espaço, o seletor combinado não bate
+- Não usar `.ivent-row` — a classe real é `.event-row`
+- Não usar `.test-head h4` — o título real é `h5.test-status` dentro de `.detail-head`
+- Não usar `.test-list-item .test-name` — o nome real é `.test-detail .name`
+- Não aplicar `font-family: monospace` em `*` globalmente — ícones Font Awesome quebram
+- Não colorir `h5.test-status` com a cor de status (verde/vermelho) — o título deve ser sempre branco `#e6edf3`
+- Não usar `.test-list-item[status="pass"]` para colorir por status — `status` está no `<li class="test-item">`, não no `<ul class="test-list-item">`. Usar `.test-list-item .test-item[status="pass"]`
+- Não adicionar `border-left` em `.test-list-item .test-item.active` — cria um retângulo visual alto indesejado na sidebar
+- Para esconder um nó de texto (`&middot;`, texto livre) use `font-size: 0` no container e restaure nos filhos — CSS não seleciona nós de texto diretamente
+- Sobrescrever `.float-right` via CSS não funciona quando o elemento tem a classe hardcoded no HTML — usar Java `patchHtml` com `replaceAll` para reordenar diretamente no HTML
