@@ -1,25 +1,52 @@
-/* ── Branding ── */
-.logo {
-  background-image: none !important;
-  width: 40px !important;
-  height: 40px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-.nav-logo a {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  height: 60px;
-}
-
 /* ── Tipografia ── */
-body.spa-report.dark {
-  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif !important;
+body.spa-report.dark,
+.dark {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif !important;
 }
 
-/* ── Fundo ── */
+/* Nomes de teste, timestamps e logs — monospace igual à doc */
+.dark .test-list-item .test-name,
+.dark .test-list-item span,
+.dark .ivent-row td,
+.dark .ivent-row td *,
+.dark .test-head .test-name,
+.dark .category-label,
+.dark code {
+  font-family: Consolas, 'JetBrains Mono', 'Courier New', monospace !important;
+}
+
+/* ── Nome do teste na sidebar ── */
+.dark .test-list-item .test-name,
+.test-list-item .test-name {
+  color: #e6edf3 !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+}
+
+.dark .test-list-item.pass-bg .test-name,
+.dark .test-list-item .text-pass {
+  color: #e6edf3 !important;
+}
+
+.dark .test-list-item {
+  border-left: 3px solid transparent !important;
+  transition: border-color 0.15s !important;
+}
+
+.dark .test-list-item.pass-bg {
+  border-left-color: #3fb950 !important;
+  background-color: rgba(63,185,80,0.06) !important;
+}
+
+.dark .test-list-item.fail-bg {
+  border-left-color: #f85149 !important;
+  background-color: rgba(248,81,73,0.06) !important;
+}
+
+/* ── Fundo principal ── */
+html,
+body,
 body.dark,
 .dark .header,
 .main-content,
@@ -36,9 +63,50 @@ body.dark,
 .dark .test-content-inner,
 .dark .detail-view,
 .dark .layout {
-  background-color: #1e1e1e !important;
+  background-color: #0d1117 !important;
 }
 
+/* ── Título principal do teste (painel direito) ── */
+.test-head h4,
+.test-head .test-name,
+.test-head,
+.dark .test-head h4,
+.dark .test-head .test-name {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #e6edf3 !important;
+  letter-spacing: 0 !important;
+  padding-bottom: 10px !important;
+  border-bottom: 1px solid #30363d !important;
+  margin-bottom: 14px !important;
+}
+
+/* ── Título da classe / relatório na navbar ── */
+.nav-logo .report-name,
+.dark .report-name,
+.navbar-brand,
+.dark .navbar-brand {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #39d0c4 !important;
+  letter-spacing: 0.3px !important;
+}
+
+/* ── Cabeçalho "Tests" da sidebar ── */
+.side-nav .nav-header,
+.dark .side-nav .nav-header,
+.dark .tests-header,
+.tests-header {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #39d0c4 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  padding: 14px 16px 10px !important;
+  border-bottom: 1px solid #30363d !important;
+}
+
+/* ── Sidebar / nav lateral ── */
 .test-list,
 .side-nav,
 .dark .test-list,
@@ -51,23 +119,25 @@ body.dark,
 .dark #side-menu,
 .test-list-item,
 .dark .test-list-item {
-  background-color: #080808 !important;
-  border-right: 1px solid rgba(255,255,255,0.08) !important;
+  background-color: #080d12 !important;
+  border-right: 1px solid #30363d !important;
 }
 
+/* ── Navbar superior ── */
 .header.navbar,
 nav.navbar {
-  background-color: #050505 !important;
-  border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+  background-color: #080d12 !important;
+  border-bottom: 1px solid #30363d !important;
 }
 
+/* ── Cards ── */
 .dark .card,
 .dark .card-body {
-  background-color: #1e1e1e !important;
-  border-color: rgba(255,255,255,0.06) !important;
+  background-color: #161b22 !important;
+  border-color: #30363d !important;
 }
 
-/* ── Badges de status — Allure style ── */
+/* ── Badges de status ── */
 .badge.log {
   font-size: 10px !important;
   padding: 3px 9px !important;
@@ -80,11 +150,11 @@ nav.navbar {
   display: inline-block !important;
 }
 
-.pass-bg, .badge.log.pass-bg     { background-color: #3d7a22 !important; color: #d4edcc !important; }
-.fail-bg, .badge.log.fail-bg     { background-color: #8c1f19 !important; color: #fdd9d7 !important; }
-.info-bg, .badge.log.info-bg     { background-color: #1a4e7a !important; color: #cde4f5 !important; }
+.pass-bg, .badge.log.pass-bg     { background-color: rgba(63,185,80,0.18)  !important; color: #3fb950 !important; border: 1px solid rgba(63,185,80,0.35)  !important; }
+.fail-bg, .badge.log.fail-bg     { background-color: rgba(248,81,73,0.18)  !important; color: #f85149 !important; border: 1px solid rgba(248,81,73,0.35)  !important; }
+.info-bg, .badge.log.info-bg     { background-color: rgba(88,166,255,0.18) !important; color: #58a6ff !important; border: 1px solid rgba(88,166,255,0.35) !important; }
 .warn-bg, .badge.log.warn-bg,
-.warning-bg                       { background-color: #7a4a08 !important; color: #fde6c0 !important; }
+.warning-bg                       { background-color: rgba(210,153,34,0.18) !important; color: #d29922 !important; border: 1px solid rgba(210,153,34,0.35) !important; }
 
 /* ── Ocultar headers da tabela ── */
 table.table-sm thead,
@@ -92,24 +162,24 @@ table.table thead {
   display: none !important;
 }
 
-/* ── Linhas do log mais leves ── */
+/* ── Linhas do log ── */
 .ivent-row > td {
   padding: 7px 10px !important;
-  border-top: 1px solid rgba(255,255,255,0.05) !important;
+  border-top: 1px solid #21262d !important;
   border-bottom: none !important;
-  font-size: 12.5px !important;
-  line-height: 1.5 !important;
+  font-size: 12px !important;
+  line-height: 1.6 !important;
 }
 
 .ivent-row:hover > td {
-  background-color: rgba(255,255,255,0.03) !important;
+  background-color: rgba(255,255,255,0.02) !important;
 }
 
-/* ── Sidebar ── */
-.text-pass  { color: #6bbf47 !important; }
-.text-fail  { color: #e8463c !important; }
+/* ── Cores de status na sidebar ── */
+.text-pass    { color: #3fb950 !important; }
+.text-fail    { color: #f85149 !important; }
 .text-warn,
-.text-warning { color: #e8a83a !important; }
+.text-warning { color: #d29922 !important; }
 
 /* ── Ocultar badges de data/hora do cabeçalho ── */
 span.s,
@@ -117,13 +187,46 @@ span.r {
   display: none !important;
 }
 
-/* ── Bloco pre (request/response) ── */
+/* ── Blocos pre (request/response) ── */
 pre {
-  background-color: #141820 !important;
-  border: 1px solid rgba(255,255,255,0.08) !important;
-  border-radius: 4px !important;
-  padding: 8px 10px !important;
+  background-color: #0d1117 !important;
+  border: 1px solid #30363d !important;
+  border-left: 3px solid #39d0c4 !important;
+  border-radius: 0 6px 6px 0 !important;
+  padding: 10px 14px !important;
   font-size: 11.5px !important;
   line-height: 1.6 !important;
-  color: #c5d4e0 !important;
+  color: #c9d1d9 !important;
+}
+
+/* ── Accent ciano nos títulos de teste ── */
+.test-list-item.active,
+.dark .test-list-item.active {
+  border-left: 3px solid #39d0c4 !important;
+}
+
+.dark a,
+.dark .nav-link {
+  color: #58a6ff !important;
+}
+
+.dark a:hover,
+.dark .nav-link:hover {
+  color: #39d0c4 !important;
+}
+
+/* ── Logo ── */
+.logo {
+  background-image: none !important;
+  width: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.nav-logo a {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 60px;
 }
